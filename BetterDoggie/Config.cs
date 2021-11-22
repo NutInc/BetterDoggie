@@ -12,9 +12,6 @@
         [Description("The size the 939 will be sized to.")]
         public Vector3 DoggieScale { get; set; } = new Vector3(.85f, .85f, .85f);
 
-        [Description("The speed boost that the dog should get. (Default is 7)")]
-        public float DogSpeed { get; set; } = 9f;
-
         [Description("The base amount of damage 939 will do.")]
         public float BaseDamage { get; set; } = 40f;
 
@@ -23,7 +20,8 @@
 
         [Description("Message to send to players when they spawn as 939")]
         public string SpawnMessage { get; set; } =
-            "<color=orange>You have spawned as an <color=red>upgraded</color> SCP-939! You run <color=red>faster</color> but slow down when you attack!</color>";
+            "<color=orange>You have spawned as an <color=red>upgraded</color> SCP-939! You run <color=red>faster</color> but slow down when you attack! " +
+            "You can also bust down doors and pry gates when your Hume shield is below 50!</color>";
 
         [Description("Can 939 bust open doors and gates if it is below a certain AHP?")]
         public bool EnableDogDoorBusting { get; set; } = true;

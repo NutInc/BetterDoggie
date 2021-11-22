@@ -22,32 +22,22 @@
         {
             Singleton = this;
             
-            RegisterEvents();
+            PlayerEvents.ChangingRole += EventHandlers.OnChangingRoles;
+            PlayerEvents.Hurting += EventHandlers.OnHurtingPlayer;
+            PlayerEvents.InteractingDoor += EventHandlers.OnInteractingDoor;
             
             base.OnEnabled();
         }
 
         public override void OnDisabled()
         {
-            UnRegisterEvents();
+            PlayerEvents.ChangingRole -= EventHandlers.OnChangingRoles;
+            PlayerEvents.Hurting -= EventHandlers.OnHurtingPlayer;
+            PlayerEvents.InteractingDoor -= EventHandlers.OnInteractingDoor;
             
             Singleton = null;
             
             base.OnDisabled();
-        }
-
-        private static void RegisterEvents()
-        {
-            PlayerEvents.ChangingRole += EventHandlers.OnChangingRoles;
-            PlayerEvents.Hurting += EventHandlers.OnHurtingPlayer;
-            PlayerEvents.InteractingDoor += EventHandlers.OnInteractingDoor;
-        }
-
-        private static void UnRegisterEvents()
-        {
-            PlayerEvents.ChangingRole -= EventHandlers.OnChangingRoles;
-            PlayerEvents.Hurting -= EventHandlers.OnHurtingPlayer;
-            PlayerEvents.InteractingDoor -= EventHandlers.OnInteractingDoor;
         }
     }
 }

@@ -1,7 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net472</TargetFramework>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="EXILED" Version="3.7.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>lib\Assembly-CSharp-Publicized.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
+      </Reference>
+      <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>lib\Mirror.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+    </ItemGroup>
 
 </Project>

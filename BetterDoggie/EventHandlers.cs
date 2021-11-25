@@ -34,6 +34,9 @@
                 ev.IsAllowed = false;
                 return;
             }
+            
+            if (ev.Attacker == ev.Target)
+                return;
 
             // 600 Is the maximum hume shield of 939
             ev.Amount = BetterDoggie.Singleton.Config.BaseDamage + Math.Abs(ev.Attacker.ArtificialHealth - 600) / 600  * BetterDoggie.Singleton.Config.MaxDamageBoost;

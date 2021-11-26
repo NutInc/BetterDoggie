@@ -10,7 +10,7 @@
         [Description("Is the plugin enabled?")]
         public bool IsEnabled { get; set; } = true;
 
-        [Description("The max HP that dog will spawn with")]
+        [Description("The max HP that dog will spawn with.")]
         public int DoggieHealth { get; set; } = 1500;
         
         [Description("The maximum AHP the dog can spawn with.")]
@@ -19,7 +19,7 @@
         [Description("Should the dog get the SCP-207 effect?")]
         public bool ColaSpeedBoost { get; set; } = true;
 
-        [Description("The size the the dog will be sized to.")]
+        [Description("The size of the dog when it spawns.")]
         public Vector3 DoggieScale { get; set; } = new Vector3(.85f, .85f, .85f);
 
         [Description("The base amount of damage the dog will do.")]

@@ -17,16 +17,23 @@
 
             Timing.CallDelayed(2f, () =>
             {
-                ev.Player.Broadcast(8, BetterDoggie.Singleton.Config.SpawnMessage);
-                
+                ev.Player.Broadcast(BetterDoggie.Singleton.Config.SpawnBroadcast);
+
+                ev.Player.Health = BetterDoggie.Singleton.Config.DoggieHealth;
+                ev.Player.MaxHealth = BetterDoggie.Singleton.Config.DoggieHealth;
+                ev.Player.ArtificialHealth = BetterDoggie.Singleton.Config.DoggieAhp;
+                ev.Player.MaxArtificialHealth = BetterDoggie.Singleton.Config.DoggieAhp;
+
                 ev.Player.Scale = BetterDoggie.Singleton.Config.DoggieScale;
-                ev.Player.EnableEffect<Scp207>();
+                
+                if (BetterDoggie.Singleton.Config.ColaSpeedBoost)
+                    ev.Player.EnableEffect<Scp207>();
             });
         }
 
         public static void OnHurtingPlayer(HurtingEventArgs ev)
         {
-            if (ev.Attacker.Role != RoleType.Scp93953 && ev.Attacker.Role != RoleType.Scp93989)
+            if (ev.Attacker.Role != RoleType.Scp93953 && ev.Attacker.Role != RoleType.Scp93989 || ev.Attacker == ev.Target)
                 return;
 
             if (ev.DamageType == DamageTypes.Scp207)
@@ -34,12 +41,9 @@
                 ev.IsAllowed = false;
                 return;
             }
-            
-            if (ev.Attacker == ev.Target)
-                return;
 
-            // 600 Is the maximum hume shield of 939
-            ev.Amount = BetterDoggie.Singleton.Config.BaseDamage + Math.Abs(ev.Attacker.ArtificialHealth - 600) / 600  * BetterDoggie.Singleton.Config.MaxDamageBoost;
+            var maxHume = BetterDoggie.Singleton.Config.DoggieAhp;
+            ev.Amount = BetterDoggie.Singleton.Config.BaseDamage + Math.Abs(ev.Attacker.ArtificialHealth - maxHume) / maxHume  * BetterDoggie.Singleton.Config.MaxDamageBoost;
             
             ev.Attacker.EnableEffect<SinkHole>(3f, true);
             ev.Attacker.ChangeEffectIntensity<SinkHole>(2);
@@ -54,19 +58,33 @@
                 return;
 
             if (ev.Player.ArtificialHealth <= BetterDoggie.Singleton.Config.DoorBustAhp)
-                BustDoor(ev.Door.Base, ev.Player);
+                BustDoor(ev.Door.Base, ev.Player, BetterDoggie.Singleton.Config.EnableBustSpeedBoost);
         }
-        
-        private static void BustDoor(DoorVariant door, Player ply)
-        {
-            if (door is IDamageableDoor damage)
-                damage.IsDestroyed = true;
 
-            if (door is PryableDoor pryableDoor)
-                pryableDoor.TryPryGate();
+        /// <summary>
+        /// Busts down a door and applies effect
+        /// </summary>
+        /// <param name="door"></param>
+        /// <param name="ply"></param>
+        /// <param name="speedBoost"></param>
+        private static void BustDoor(DoorVariant door, Player ply, bool speedBoost)
+        {
+            switch (door)
+            {
+                case IDamageableDoor damage:
+                    damage.IsDestroyed = true;
+                    break;
+                case PryableDoor pryableDoor:
+                    pryableDoor.TryPryGate();
+                    break;
+            }
+
+            if (!speedBoost)
+                return;
             
-            ply.ChangeEffectIntensity<Scp207>(2);
-            Timing.CallDelayed(2f, () => ply.ChangeEffectIntensity<Scp207>(1));
+            ply.ChangeEffectIntensity<Scp207>(BetterDoggie.Singleton.Config.BustBoostAmount);
+            if (BetterDoggie.Singleton.Config.ColaSpeedBoost)
+                Timing.CallDelayed(2f, () => ply.ChangeEffectIntensity<Scp207>(1));
         }
     }
 }

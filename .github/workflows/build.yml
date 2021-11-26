@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+env:
+  EXILED_REFERENCES_PATH: ${{ github.workspace }}/BetterDoggie/lib
+
 jobs:
   build:
     runs-on: windows-latest
@@ -40,6 +43,8 @@ jobs:
         run: ./7zip.exe e References.zip -oBetterDoggie/lib/ -r -y
 
       - name: Build
+        env:
+          EXILED_REFERENCES: ${{ env.EXILED_REFERENCES_PATH }}
         run: msbuild BetterDoggie.sln -p:Configuration=release
 
       - name: Upload Build

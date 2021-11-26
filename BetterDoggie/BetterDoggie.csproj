@@ -10,16 +10,16 @@
 
     <ItemGroup>
       <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>lib\Assembly-CSharp-Publicized.dll</HintPath>
+        <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-Publicized.dll</HintPath>
       </Reference>
       <Reference Include="Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>lib\Assembly-CSharp-firstpass.dll</HintPath>
+        <HintPath>$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll</HintPath>
       </Reference>
       <Reference Include="Mirror, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>lib\Mirror.dll</HintPath>
+        <HintPath>$(EXILED_REFERENCES)\Mirror.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-        <HintPath>lib\UnityEngine.CoreModule.dll</HintPath>
+        <HintPath>$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
     </ItemGroup>
 

@@ -1,6 +1,7 @@
 ﻿namespace BetterDoggie
 {
     using System;
+    using UnityEngine;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using Interactables.Interobjects;
@@ -59,6 +60,14 @@
 
             if (ev.Player.ArtificialHealth <= BetterDoggie.Singleton.Config.DoorBustAhp)
                 BustDoor(ev.Door.Base, ev.Player, BetterDoggie.Singleton.Config.EnableBustSpeedBoost);
+        }
+        
+        public static void OnDied(DiedEventArgs ev)
+        {
+            if (ev.Target.Role != RoleType.Scp93953 && ev.Target.Role != RoleType.Scp93989)
+                return;
+
+            ev.Target.Scale = new Vector3(1, 1, 1);
         }
 
         /// <summary>

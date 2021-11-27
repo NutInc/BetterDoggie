@@ -25,6 +25,7 @@
             PlayerEvents.ChangingRole += EventHandlers.OnChangingRoles;
             PlayerEvents.Hurting += EventHandlers.OnHurtingPlayer;
             PlayerEvents.InteractingDoor += EventHandlers.OnInteractingDoor;
+            PlayerEvents.Died += EventHandlers.OnDied;
             
             base.OnEnabled();
         }
@@ -34,6 +35,7 @@
             PlayerEvents.ChangingRole -= EventHandlers.OnChangingRoles;
             PlayerEvents.Hurting -= EventHandlers.OnHurtingPlayer;
             PlayerEvents.InteractingDoor -= EventHandlers.OnInteractingDoor;
+            PlayerEvents.Died -= EventHandlers.OnDied;
             
             Singleton = null;
             

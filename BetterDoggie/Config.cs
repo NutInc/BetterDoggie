@@ -16,8 +16,8 @@
         [Description("The maximum AHP the dog can spawn with.")]
         public int DoggieAhp { get; set; } = 600;
 
-        [Description("Should the dog get the SCP-207 effect?")]
-        public bool ColaSpeedBoost { get; set; } = true;
+        [Description("Should the dog get the a speed boost? (Set to 0 or less to disable)")]
+        public byte ColaSpeedBoost { get; set; } = 20;
 
         [Description("The size of the dog when it spawns.")]
         public Vector3 DoggieScale { get; set; } = new Vector3(.85f, .85f, .85f);
@@ -42,7 +42,7 @@
         [Description("Gives 939 a speed boost when it busts down a door.")]
         public bool EnableBustSpeedBoost { get; set; } = true;
 
-        [Description("The amount of coke to give the dog when he busts down a door. (Max of 4)")]
-        public byte BustBoostAmount { get; set; } = 2;
+        [Description("The speed boost the dog gets when it busts down a door.")]
+        public byte BustBoostAmount { get; set; } = 50;
     }
 }

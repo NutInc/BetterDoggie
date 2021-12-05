@@ -14,8 +14,8 @@
         public override string Author => "Parkeymon";
         public override string Name => "BetterDoggie";
         public override string Prefix => "better_doggie";
-        public override Version Version => new Version(1, 1, 1);
-        public override Version RequiredExiledVersion => new Version(3, 0, 5);
+        public override Version Version => new Version(1, 2, 0);
+        public override Version RequiredExiledVersion => new Version(4, 0, 0);
         public override PluginPriority Priority => PluginPriority.Low;
         
         public override void OnEnabled()
@@ -25,8 +25,7 @@
             PlayerEvents.ChangingRole += EventHandlers.OnChangingRoles;
             PlayerEvents.Hurting += EventHandlers.OnHurtingPlayer;
             PlayerEvents.InteractingDoor += EventHandlers.OnInteractingDoor;
-            PlayerEvents.Died += EventHandlers.OnDied;
-            
+
             base.OnEnabled();
         }
 
@@ -35,8 +34,7 @@
             PlayerEvents.ChangingRole -= EventHandlers.OnChangingRoles;
             PlayerEvents.Hurting -= EventHandlers.OnHurtingPlayer;
             PlayerEvents.InteractingDoor -= EventHandlers.OnInteractingDoor;
-            PlayerEvents.Died -= EventHandlers.OnDied;
-            
+
             Singleton = null;
             
             base.OnDisabled();

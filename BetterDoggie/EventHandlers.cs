@@ -13,6 +13,9 @@
     {
         public static void OnChangingRoles(ChangingRoleEventArgs ev)
         {
+            if (ev.Player.Role == RoleType.Scp93953 || ev.Player.Role == RoleType.Scp93989)
+                ev.Player.Scale = new Vector3(1, 1, 1);
+            
             if (ev.NewRole != RoleType.Scp93953 && ev.NewRole != RoleType.Scp93989)
                 return;
 
@@ -26,23 +29,18 @@
                 ev.Player.MaxArtificialHealth = BetterDoggie.Singleton.Config.DoggieAhp;
 
                 ev.Player.Scale = BetterDoggie.Singleton.Config.DoggieScale;
-                
-                if (BetterDoggie.Singleton.Config.ColaSpeedBoost)
-                    ev.Player.EnableEffect<Scp207>();
+
+                if (BetterDoggie.Singleton.Config.ColaSpeedBoost <= 0) return;
+                ev.Player.EnableEffect<MovementBoost>();
+                ev.Player.ChangeEffectIntensity<MovementBoost>(BetterDoggie.Singleton.Config.ColaSpeedBoost);
             });
         }
 
         public static void OnHurtingPlayer(HurtingEventArgs ev)
         {
-            if (ev.Attacker.Role != RoleType.Scp93953 && ev.Attacker.Role != RoleType.Scp93989 || ev.Attacker == ev.Target)
+            if (ev.Attacker == null || ev.Attacker.Role != RoleType.Scp93953 && ev.Attacker.Role != RoleType.Scp93989 || ev.Attacker == ev.Target)
                 return;
-
-            if (ev.DamageType == DamageTypes.Scp207)
-            {
-                ev.IsAllowed = false;
-                return;
-            }
-
+            
             var maxHume = BetterDoggie.Singleton.Config.DoggieAhp;
             ev.Amount = BetterDoggie.Singleton.Config.BaseDamage + Math.Abs(ev.Attacker.ArtificialHealth - maxHume) / maxHume  * BetterDoggie.Singleton.Config.MaxDamageBoost;
             
@@ -55,19 +53,13 @@
             if (!BetterDoggie.Singleton.Config.EnableDogDoorBusting)
                 return;
             
-            if (ev.Player.Role != RoleType.Scp93953 && ev.Player.Role != RoleType.Scp93989)
+            if (ev.Player.Role != RoleType.Scp93953 && ev.Player.Role != RoleType.Scp93989 
+                || ev.Door.Base is IDamageableDoor door && door.IsDestroyed 
+                || ev.Door.Base is PryableDoor gate && gate.IsConsideredOpen())
                 return;
 
             if (ev.Player.ArtificialHealth <= BetterDoggie.Singleton.Config.DoorBustAhp)
                 BustDoor(ev.Door.Base, ev.Player, BetterDoggie.Singleton.Config.EnableBustSpeedBoost);
-        }
-        
-        public static void OnDied(DiedEventArgs ev)
-        {
-            if (ev.Target.Role != RoleType.Scp93953 && ev.Target.Role != RoleType.Scp93989)
-                return;
-
-            ev.Target.Scale = new Vector3(1, 1, 1);
         }
 
         /// <summary>
@@ -91,9 +83,8 @@
             if (!speedBoost)
                 return;
             
-            ply.ChangeEffectIntensity<Scp207>(BetterDoggie.Singleton.Config.BustBoostAmount);
-            if (BetterDoggie.Singleton.Config.ColaSpeedBoost)
-                Timing.CallDelayed(2f, () => ply.ChangeEffectIntensity<Scp207>(1));
+            ply.ChangeEffectIntensity<MovementBoost>(BetterDoggie.Singleton.Config.BustBoostAmount);
+            Timing.CallDelayed(2f, () => ply.ChangeEffectIntensity<MovementBoost>(BetterDoggie.Singleton.Config.ColaSpeedBoost));
         }
     }
 }

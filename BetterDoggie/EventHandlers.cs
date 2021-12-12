@@ -59,8 +59,8 @@
                 return;
             
             if ((ev.Player.Role != RoleType.Scp93953 && ev.Player.Role != RoleType.Scp93989) 
-                || ev.Door.Base is IDamageableDoor door && door.IsDestroyed 
-                || ev.Door.Base is PryableDoor gate && gate.IsConsideredOpen())
+                || (ev.Door.Base is IDamageableDoor door && door.IsDestroyed)
+                || (ev.Door.Base is PryableDoor gate && gate.IsConsideredOpen()))
                 return;
 
             if (ev.Player.ArtificialHealth <= BetterDoggie.Singleton.Config.DoorBustAhp)

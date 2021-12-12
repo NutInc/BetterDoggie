@@ -21,6 +21,8 @@
 
             Timing.CallDelayed(2f, () =>
             {
+                if (ev.Player == null || ev.NewRole != RoleType.Scp93953 && ev.NewRole != RoleType.Scp93989) return;
+                
                 ev.Player.Broadcast(BetterDoggie.Singleton.Config.SpawnBroadcast);
 
                 ev.Player.Health = BetterDoggie.Singleton.Config.DoggieHealth;
@@ -38,11 +40,14 @@
 
         public static void OnHurtingPlayer(HurtingEventArgs ev)
         {
-            if (ev.Attacker == null || ev.Attacker.Role != RoleType.Scp93953 && ev.Attacker.Role != RoleType.Scp93989 || ev.Attacker == ev.Target)
+            if (ev.Attacker == null || ev.Target == null || ev.Attacker == ev.Target || (ev.Attacker.Role != RoleType.Scp93953 && ev.Attacker.Role != RoleType.Scp93989))
                 return;
             
+            // Original damage + percentage of hume shield gone * max damage (40 + .50 * 150)
             var maxHume = BetterDoggie.Singleton.Config.DoggieAhp;
-            ev.Amount = BetterDoggie.Singleton.Config.BaseDamage + Math.Abs(ev.Attacker.ArtificialHealth - maxHume) / maxHume  * BetterDoggie.Singleton.Config.MaxDamageBoost;
+            ev.Amount = BetterDoggie.Singleton.Config.BaseDamage +
+                        Math.Abs(ev.Attacker.ArtificialHealth - maxHume) /
+                        (maxHume * BetterDoggie.Singleton.Config.MaxDamageBoost);
             
             ev.Attacker.EnableEffect<SinkHole>(3f, true);
             ev.Attacker.ChangeEffectIntensity<SinkHole>(2);

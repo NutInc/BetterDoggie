@@ -21,7 +21,7 @@
 
             Timing.CallDelayed(2f, () =>
             {
-                if (ev.Player == null || (ev.NewRole != RoleType.Scp93953 && ev.NewRole != RoleType.Scp93989)) return;
+                if (ev.Player == null || (ev.Player.Role != RoleType.Scp93953 && ev.Player.Role != RoleType.Scp93989)) return;
                 
                 ev.Player.Broadcast(BetterDoggie.Singleton.Config.SpawnBroadcast);
 

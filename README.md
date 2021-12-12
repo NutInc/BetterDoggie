@@ -7,7 +7,7 @@ Many of the features are from the original [BetterScp939](https://github.com/iop
 
 This plugin applies damage based on the dogs hume shield. The lower the hume shield the higher the damage.
 
-The dog will by default be sped up with the 207 effect but this can be configured and will be slowed down when attacking.
+The dog will by default have sped up walk/sprint but this can be configured with different speeds and will be slowed down when attacking.
 It can also be configured for the dog to bust down doors if it reaches under a certain hume amount.
 
 Configs | Description

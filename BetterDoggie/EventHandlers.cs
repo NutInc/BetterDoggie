@@ -48,9 +48,6 @@
             ev.Amount = BetterDoggie.Singleton.Config.BaseDamage +
                         Math.Abs(ev.Attacker.ArtificialHealth - maxHume) /
                         (maxHume * BetterDoggie.Singleton.Config.MaxDamageBoost);
-            
-            //ev.Attacker.EnableEffect<SinkHole>(3f, true);
-           // ev.Attacker.ChangeEffectIntensity<SinkHole>(2);
         }
 
         public static void OnInteractingDoor(InteractingDoorEventArgs ev)
@@ -62,9 +59,6 @@
                 || (ev.Door.Base is IDamageableDoor door && door.IsDestroyed)
                 || (ev.Door.Base is PryableDoor gate && gate.IsConsideredOpen()))
                 return;
-
-            if (ev.Player.ArtificialHealth <= BetterDoggie.Singleton.Config.DoorBustAhp)
-                BustDoor(ev.Door.Base, ev.Player, BetterDoggie.Singleton.Config.EnableBustSpeedBoost);
         }
 
         /// <summary>

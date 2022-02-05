@@ -49,8 +49,8 @@
                         Math.Abs(ev.Attacker.ArtificialHealth - maxHume) /
                         (maxHume * BetterDoggie.Singleton.Config.MaxDamageBoost);
             
-            ev.Attacker.EnableEffect<SinkHole>(3f, true);
-            ev.Attacker.ChangeEffectIntensity<SinkHole>(2);
+            //ev.Attacker.EnableEffect<SinkHole>(3f, true);
+           // ev.Attacker.ChangeEffectIntensity<SinkHole>(2);
         }
 
         public static void OnInteractingDoor(InteractingDoorEventArgs ev)

@@ -19,6 +19,12 @@
         [Description("Should the dog get the a speed boost? (Set to 0 or less to disable)")]
         public byte ColaSpeedBoost { get; set; } = 20;
 
+        [Description("The duration the dog should get slowed down when attacking.")]
+        public float SlowdownDuration { get; set; } = 3f;
+
+        [Description("Should the slowdown time stack for each attack the dog does? (Add X seconds to slowdown versus just resetting it to X seconds)")]
+        public bool ShouldSlowdownStack { get; set; } = true;
+
         [Description("The size of the dog when it spawns.")]
         public Vector3 DoggieScale { get; set; } = new Vector3(.85f, .85f, .85f);
 

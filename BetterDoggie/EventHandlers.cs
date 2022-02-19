@@ -1,7 +1,6 @@
 ﻿namespace BetterDoggie
 {
     using System;
-    using UnityEngine;
     using Exiled.API.Features;
     using Exiled.Events.EventArgs;
     using Interactables.Interobjects;
@@ -13,15 +12,16 @@
     {
         public static void OnChangingRoles(ChangingRoleEventArgs ev)
         {
-            if (ev.Player.Role == RoleType.Scp93953 || ev.Player.Role == RoleType.Scp93989)
-                ev.Player.Scale = new Vector3(1, 1, 1);
-            
-            if (ev.NewRole != RoleType.Scp93953 && ev.NewRole != RoleType.Scp93989)
+            // Not sure why that was there. Probably me being stupid or I didnt comment something that said it was there for a reason lmao
+            /*if (Is939(ev.Player.Role))
+                ev.Player.Scale = new Vector3(1, 1, 1);*/
+
+            if (!ev.NewRole.Is939())
                 return;
 
             Timing.CallDelayed(2f, () =>
             {
-                if (ev.Player == null || (ev.Player.Role != RoleType.Scp93953 && ev.Player.Role != RoleType.Scp93989)) return;
+                if (ev.Player == null || !Is939(ev.Player.Role)) return;
                 
                 ev.Player.Broadcast(BetterDoggie.Singleton.Config.SpawnBroadcast);
 
@@ -40,16 +40,16 @@
 
         public static void OnHurtingPlayer(HurtingEventArgs ev)
         {
-            if (ev.Attacker == null || ev.Target == null || ev.Attacker == ev.Target || (ev.Attacker.Role != RoleType.Scp93953 && ev.Attacker.Role != RoleType.Scp93989))
+            if (ev.Attacker == null || ev.Target == null || ev.Attacker == ev.Target || !Is939(ev.Attacker.Role))
                 return;
             
-            // Original damage + percentage of hume shield gone * max damage (40 + .50 * 150)
+            // Original damage + percentage of hume shield gone * max damage | ex. (40 + .50 * 150)
             var maxHume = BetterDoggie.Singleton.Config.DoggieAhp;
             ev.Amount = BetterDoggie.Singleton.Config.BaseDamage +
                         Math.Abs(ev.Attacker.ArtificialHealth - maxHume) /
                         (maxHume * BetterDoggie.Singleton.Config.MaxDamageBoost);
             
-            ev.Attacker.EnableEffect<SinkHole>(3f, true);
+            ev.Attacker.EnableEffect<SinkHole>(BetterDoggie.Singleton.Config.SlowdownDuration, BetterDoggie.Singleton.Config.ShouldSlowdownStack);
             ev.Attacker.ChangeEffectIntensity<SinkHole>(2);
         }
 
@@ -58,7 +58,7 @@
             if (!BetterDoggie.Singleton.Config.EnableDogDoorBusting)
                 return;
             
-            if ((ev.Player.Role != RoleType.Scp93953 && ev.Player.Role != RoleType.Scp93989) 
+            if (!Is939(ev.Player.Role)
                 || (ev.Door.Base is IDamageableDoor door && door.IsDestroyed)
                 || (ev.Door.Base is PryableDoor gate && gate.IsConsideredOpen()))
                 return;
@@ -90,6 +90,17 @@
             
             ply.ChangeEffectIntensity<MovementBoost>(BetterDoggie.Singleton.Config.BustBoostAmount);
             Timing.CallDelayed(2f, () => ply.ChangeEffectIntensity<MovementBoost>(BetterDoggie.Singleton.Config.ColaSpeedBoost));
+        }
+
+        
+        /// <summary>
+        /// Check if player is 939
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        private static bool Is939(RoleType role)
+        {
+            return role == RoleType.Scp93953 || role == RoleType.Scp93989;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BetterDoggie
         public static void OnChangingRoles(ChangingRoleEventArgs ev)
         {
             // When 939 dies change the size back to normal
-            if (!Is939(ev.Player.Role))
+            if (!Is939(ev.Player.Role.Type))
                 ev.Player.Scale = new Vector3(1, 1, 1);
 
             Timing.CallDelayed(2f, () =>

@@ -1,4 +1,6 @@
-﻿namespace BetterDoggie
+﻿using UnityEngine;
+
+namespace BetterDoggie
 {
     using System;
     using Exiled.API.Features;
@@ -12,12 +14,9 @@
     {
         public static void OnChangingRoles(ChangingRoleEventArgs ev)
         {
-            // Not sure why that was there. Probably me being stupid or I didnt comment something that said it was there for a reason lmao
-            /*if (Is939(ev.Player.Role))
-                ev.Player.Scale = new Vector3(1, 1, 1);*/
-
-            if (!ev.NewRole.Is939())
-                return;
+            // When 939 dies change the size back to normal
+            if (!Is939(ev.Player.Role))
+                ev.Player.Scale = new Vector3(1, 1, 1);
 
             Timing.CallDelayed(2f, () =>
             {

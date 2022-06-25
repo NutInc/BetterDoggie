@@ -1,11 +1,13 @@
 ﻿namespace BetterDoggie
 {
     using System;
+    using System.Collections.Generic;
     using Exiled.API.Features;
+    using Exiled.API.Features.Items;
     using Exiled.API.Enums;
+    using MEC;
     
     using PlayerEvents = Exiled.Events.Handlers.Player; 
-    using ServerEvents = Exiled.Events.Handlers.Server;
     
     public class BetterDoggie : Plugin<Config>
     {
@@ -17,6 +19,9 @@
         public override Version Version => new Version(1, 2, 3);
         public override Version RequiredExiledVersion => new Version(5, 0, 0);
         public override PluginPriority Priority => PluginPriority.Low;
+
+        public Dictionary<Player, CoroutineHandle?> ActiveAbilities = new Dictionary<Player, CoroutineHandle?>();
+        public Dictionary<Player, int> AbilityCooldowns = new Dictionary<Player, int>();
         
         public override void OnEnabled()
         {

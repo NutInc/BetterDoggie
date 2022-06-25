@@ -7,6 +7,7 @@
     
     public class Config : IConfig
     {
+        
         [Description("Is the plugin enabled?")]
         public bool IsEnabled { get; set; } = true;
 
@@ -20,7 +21,7 @@
         public byte ColaSpeedBoost { get; set; } = 20;
 
         [Description("The duration the dog should get slowed down when attacking.")]
-        public float SlowdownDuration { get; set; } = 3f;
+        public float SlowdownDuration { get; set; } = 1.5f;
 
         [Description("Should the slowdown time stack for each attack the dog does? (Add X seconds to slowdown versus just resetting it to X seconds)")]
         public bool ShouldSlowdownStack { get; set; } = true;
@@ -32,18 +33,24 @@
         public float BaseDamage { get; set; } = 40f;
 
         [Description("The maximum amount of additional damage the dog can deal.")]
-        public float MaxDamageBoost { get; set; } = 150f;
+        public float MaxDamageBoost { get; set; } = 75f;
 
         [Description("Message to send to players when they spawn as the dog.")]
         public Broadcast SpawnBroadcast { get; set; } = new Broadcast(
             "<color=orange>You have spawned as an <color=red>upgraded</color> SCP-939! You run <color=red>faster</color> but slow down when you attack! " +
             "You can also bust down doors and pry gates when your Hume shield is below 50!</color>", 8);
-        
+
+        [Description("Hint to show players to set their keybinds when they spawn.")]
+        public string KeybindHint { get; set; } = "Upgraded SCP-939s have a boost ability that <color=orange>temporarily grants the ability to break down doors.</color>" +
+            "To use this ability, you must set a <color=orange>keybind in your console (~ key) with the format: \"cmdbind <keycode> .doggieboost\"";
+
+        public int KeybindHintShowDuration { get; set; } = 20;
+
         [Description("Can 939 bust open doors and gates if it is below a certain AHP?")]
         public bool EnableDogDoorBusting { get; set; } = true;
 
-        [Description("The dog has to have an AHP lower than this to bust doors.")]
-        public int DoorBustAhp { get; set; } = 50;
+        [Description("The cooldown between enabling / disabling the door busting ability.")]
+        public int DoorBustingCooldown { get; set; } = 15;
 
         [Description("Gives 939 a speed boost when it busts down a door.")]
         public bool EnableBustSpeedBoost { get; set; } = true;

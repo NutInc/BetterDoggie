@@ -1,69 +1,101 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs;
+using Interactables.Interobjects;
+using Interactables.Interobjects.DoorUtils;
+using CustomPlayerEffects;
+using MEC;
 
 namespace BetterDoggie
 {
-    using System;
-    using Exiled.API.Features;
-    using Exiled.Events.EventArgs;
-    using Interactables.Interobjects;
-    using Interactables.Interobjects.DoorUtils;
-    using CustomPlayerEffects;
-    using MEC;
 
     public static class EventHandlers
     {
+        private static Config _config = BetterDoggie.Singleton.Config;
+        private static Dictionary<Player, CoroutineHandle?> _activeAbilities = BetterDoggie.Singleton.ActiveAbilities;
+
         public static void OnChangingRoles(ChangingRoleEventArgs ev)
         {
+            var player = ev.Player;
+
             // When 939 dies change the size back to normal
-            if (!Is939(ev.Player.Role.Type))
-                ev.Player.Scale = new Vector3(1, 1, 1);
+            if (!Is939(player.Role.Type))
+                player.Scale = new Vector3(1, 1, 1);
 
             Timing.CallDelayed(2f, () =>
             {
-                if (ev.Player == null || !Is939(ev.Player.Role)) return;
-                
-                ev.Player.Broadcast(BetterDoggie.Singleton.Config.SpawnBroadcast);
+                if (player == null || !Is939(player.Role)) return;
 
-                ev.Player.Health = BetterDoggie.Singleton.Config.DoggieHealth;
-                ev.Player.MaxHealth = BetterDoggie.Singleton.Config.DoggieHealth;
-                ev.Player.ArtificialHealth = BetterDoggie.Singleton.Config.DoggieAhp;
-                ev.Player.MaxArtificialHealth = BetterDoggie.Singleton.Config.DoggieAhp;
+                player.Broadcast(_config.SpawnBroadcast);
+                player.Broadcast(new Exiled.API.Features.Broadcast("<color=red>Remember to set your ability keybind! (.doggiehelp for help)</color>", 10), false);
+                player.ShowHint(_config.KeybindHint, _config.KeybindHintShowDuration);
 
-                ev.Player.Scale = BetterDoggie.Singleton.Config.DoggieScale;
+                player.Health = _config.DoggieHealth;
+                player.MaxHealth = _config.DoggieHealth;
+                player.ArtificialHealth = _config.DoggieAhp;
+                player.MaxArtificialHealth = _config.DoggieAhp;
 
-                if (BetterDoggie.Singleton.Config.ColaSpeedBoost <= 0) return;
-                ev.Player.EnableEffect<MovementBoost>();
-                ev.Player.ChangeEffectIntensity<MovementBoost>(BetterDoggie.Singleton.Config.ColaSpeedBoost);
+                player.Scale = _config.DoggieScale;
+
+                if (_config.ColaSpeedBoost <= 0) return;
+                player.EnableEffect<MovementBoost>();
+                player.ChangeEffectIntensity<MovementBoost>(_config.ColaSpeedBoost);
             });
         }
 
         public static void OnHurtingPlayer(HurtingEventArgs ev)
         {
-            if (ev.Attacker == null || ev.Target == null || ev.Attacker == ev.Target || !Is939(ev.Attacker.Role))
+            var attacker = ev.Attacker;
+
+            if (attacker == null || ev.Target == null || attacker == ev.Target || !Is939(attacker.Role))
                 return;
-            
-            // Original damage + percentage of hume shield gone * max damage | ex. (40 + .50 * 150)
-            var maxHume = BetterDoggie.Singleton.Config.DoggieAhp;
-            ev.Amount = BetterDoggie.Singleton.Config.BaseDamage +
-                        Math.Abs(ev.Attacker.ArtificialHealth - maxHume) /
-                        (maxHume * BetterDoggie.Singleton.Config.MaxDamageBoost);
-            
-            ev.Attacker.EnableEffect<SinkHole>(BetterDoggie.Singleton.Config.SlowdownDuration, BetterDoggie.Singleton.Config.ShouldSlowdownStack);
-            ev.Attacker.ChangeEffectIntensity<SinkHole>(2);
+
+            ev.Amount = _config.BaseDamage;
+
+            if (attacker.ArtificialHealth <= 200)
+            {
+                ev.Amount += 10;
+            }
+            else if (attacker.ArtificialHealth <= 50)
+            {
+                ev.Amount += 35;
+            }
+
+            attacker.EnableEffect<SinkHole>(_config.SlowdownDuration, _config.ShouldSlowdownStack);
+            attacker.ChangeEffectIntensity<SinkHole>(2);
         }
 
         public static void OnInteractingDoor(InteractingDoorEventArgs ev)
         {
-            if (!BetterDoggie.Singleton.Config.EnableDogDoorBusting)
+            var player = ev.Player;
+
+            if (!_config.EnableDogDoorBusting)
                 return;
-            
-            if (!Is939(ev.Player.Role)
+
+            if (!Is939(player.Role)
                 || (ev.Door.Base is IDamageableDoor door && door.IsDestroyed)
                 || (ev.Door.Base is PryableDoor gate && gate.IsConsideredOpen()))
                 return;
 
-            if (ev.Player.ArtificialHealth <= BetterDoggie.Singleton.Config.DoorBustAhp)
-                BustDoor(ev.Door.Base, ev.Player, BetterDoggie.Singleton.Config.EnableBustSpeedBoost);
+            if (_activeAbilities.ContainsKey(player) && _activeAbilities[player] == null)
+            {
+                _activeAbilities[player] = Timing.RunCoroutine(DoorBustingCooldown(player)); ;
+
+                BustDoor(ev.Door.Base, player, _config.EnableBustSpeedBoost);
+            }
+        }
+
+        public static IEnumerator<float> DoorBustingCooldown(Player player)
+        {
+            for(int i = _config.DoorBustingCooldown; i > 0; i--)
+            {
+                yield return Timing.WaitForSeconds(1f);
+
+                player.ShowHint($"Door bust on cooldown for {i} more seconds.", 1);
+            }
+
+            _activeAbilities[player] = null;
         }
 
         /// <summary>
@@ -87,8 +119,8 @@ namespace BetterDoggie
             if (!speedBoost)
                 return;
             
-            ply.ChangeEffectIntensity<MovementBoost>(BetterDoggie.Singleton.Config.BustBoostAmount);
-            Timing.CallDelayed(2f, () => ply.ChangeEffectIntensity<MovementBoost>(BetterDoggie.Singleton.Config.ColaSpeedBoost));
+            ply.ChangeEffectIntensity<MovementBoost>(_config.BustBoostAmount);
+            Timing.CallDelayed(2f, () => ply.ChangeEffectIntensity<MovementBoost>(_config.ColaSpeedBoost));
         }
 
         

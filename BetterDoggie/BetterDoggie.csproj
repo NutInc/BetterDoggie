@@ -6,28 +6,28 @@
 
     <ItemGroup>
       <Reference Include="Assembly-CSharp">
-        <HintPath>..\..\EXILED References\EXILED 5\Assembly-CSharp.dll</HintPath>
+        <HintPath>..\..\EXILED References\EXILED 5\11.2.1\Assembly-CSharp.dll</HintPath>
       </Reference>
       <Reference Include="Assembly-CSharp-firstpass">
-        <HintPath>..\..\EXILED References\Internal\11.2\Assembly-CSharp-firstpass.dll</HintPath>
+        <HintPath>..\..\EXILED References\Internal\11.2.1\Assembly-CSharp-firstpass.dll</HintPath>
       </Reference>
       <Reference Include="CommandSystem.Core">
         <HintPath>..\..\EXILED References\Internal\11.2\CommandSystem.Core.dll</HintPath>
       </Reference>
       <Reference Include="Exiled.API">
-        <HintPath>..\..\EXILED References\EXILED 5\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
+        <HintPath>..\..\EXILED References\EXILED 5\11.2.1\EXILED\Plugins\dependencies\Exiled.API.dll</HintPath>
       </Reference>
       <Reference Include="Exiled.Events">
-        <HintPath>..\..\EXILED References\EXILED 5\EXILED\Plugins\Exiled.Events.dll</HintPath>
+        <HintPath>..\..\EXILED References\EXILED 5\11.2.1\EXILED\Plugins\Exiled.Events.dll</HintPath>
       </Reference>
       <Reference Include="Exiled.Permissions">
-        <HintPath>..\..\EXILED References\EXILED 5\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
+        <HintPath>..\..\EXILED References\EXILED 5\11.2.1\EXILED\Plugins\Exiled.Permissions.dll</HintPath>
       </Reference>
       <Reference Include="Mirror">
-        <HintPath>..\..\EXILED References\Internal\11.2\Mirror.dll</HintPath>
+        <HintPath>..\..\EXILED References\Internal\11.2.1\Mirror.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.CoreModule">
-        <HintPath>..\..\EXILED References\Internal\11.2\UnityEngine.CoreModule.dll</HintPath>
+        <HintPath>..\..\EXILED References\Internal\11.2.1\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
     </ItemGroup>
 

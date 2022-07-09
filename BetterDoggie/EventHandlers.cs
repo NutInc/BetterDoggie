@@ -20,7 +20,7 @@ namespace BetterDoggie
             var player = ev.Player;
 
             // When 939 dies change the size back to normal
-            if (!Is939(player.Role.Type))
+            if (!Is939(ev.NewRole))
                 player.Scale = new Vector3(1, 1, 1);
 
             Timing.CallDelayed(2f, () =>

@@ -16,7 +16,7 @@
         public override string Author => "Parkeymon";
         public override string Name => "BetterDoggie";
         public override string Prefix => "better_doggie";
-        public override Version Version => new Version(1, 2, 3);
+        public override Version Version => new Version(1, 3, 1);
         public override Version RequiredExiledVersion => new Version(5, 0, 0);
         public override PluginPriority Priority => PluginPriority.Low;
 

@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
+using CustomPlayerEffects;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs;
 using Interactables.Interobjects;
 using Interactables.Interobjects.DoorUtils;
-using CustomPlayerEffects;
 using MEC;
 
 namespace BetterDoggie
@@ -28,7 +29,7 @@ namespace BetterDoggie
                 if (player == null || !Is939(player.Role)) return;
 
                 player.Broadcast(_config.SpawnBroadcast);
-                player.Broadcast(new Exiled.API.Features.Broadcast("<color=red>Remember to set your ability keybind! (.doggiehelp for help)</color>", 10), false);
+                player.Broadcast(new Exiled.API.Features.Broadcast("<color=red>Remember to set your ability keybind! (.doggiehelp for help)</color>"));
                 player.ShowHint(_config.KeybindHint, _config.KeybindHintShowDuration);
 
                 player.Health = _config.DoggieHealth;
@@ -51,16 +52,10 @@ namespace BetterDoggie
             if (attacker == null || ev.Target == null || attacker == ev.Target || !Is939(attacker.Role))
                 return;
 
-            ev.Amount = _config.BaseDamage;
-
-            if (attacker.ArtificialHealth <= 200)
-            {
-                ev.Amount += 10;
-            }
-            else if (attacker.ArtificialHealth <= 50)
-            {
-                ev.Amount += 35;
-            }
+            var maxHume = BetterDoggie.Singleton.Config.DoggieAhp;
+            ev.Amount = BetterDoggie.Singleton.Config.BaseDamage +
+                        Math.Abs(ev.Attacker.ArtificialHealth - maxHume) /
+                        (maxHume * BetterDoggie.Singleton.Config.MaxDamageBoost);
 
             attacker.EnableEffect<SinkHole>(_config.SlowdownDuration, _config.ShouldSlowdownStack);
             attacker.ChangeEffectIntensity<SinkHole>(2);
@@ -80,7 +75,7 @@ namespace BetterDoggie
 
             if (_activeAbilities.ContainsKey(player) && _activeAbilities[player] == null)
             {
-                _activeAbilities[player] = Timing.RunCoroutine(DoorBustingCooldown(player)); ;
+                _activeAbilities[player] = Timing.RunCoroutine(DoorBustingCooldown(player));
 
                 BustDoor(ev.Door.Base, player, _config.EnableBustSpeedBoost);
             }

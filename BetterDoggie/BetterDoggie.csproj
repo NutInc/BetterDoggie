@@ -31,4 +31,8 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="EXILED" Version="5.2.2" />
+    </ItemGroup>
+
 </Project>

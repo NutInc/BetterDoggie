@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using Exiled.API.Features;
-    using Exiled.API.Features.Items;
     using Exiled.API.Enums;
     using MEC;
     

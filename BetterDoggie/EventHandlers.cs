@@ -54,8 +54,7 @@ namespace BetterDoggie
 
             var maxHume = BetterDoggie.Singleton.Config.DoggieAhp;
             ev.Amount = BetterDoggie.Singleton.Config.BaseDamage +
-                        Math.Abs(ev.Attacker.ArtificialHealth - maxHume) /
-                        (maxHume * BetterDoggie.Singleton.Config.MaxDamageBoost);
+                        Math.Abs(ev.Attacker.ArtificialHealth - maxHume) / maxHume * BetterDoggie.Singleton.Config.MaxDamageBoost;
 
             attacker.EnableEffect<SinkHole>(_config.SlowdownDuration, _config.ShouldSlowdownStack);
             attacker.ChangeEffectIntensity<SinkHole>(2);
